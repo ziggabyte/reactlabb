@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Employee from "./Employee";
+import NewEmployeeForm from "./NewEmployeeForm";
 
 function EmployeeList() {
   let [employees, setEmployees] = useState([
@@ -35,17 +36,17 @@ function EmployeeList() {
 
   // lägger till en employee utifrån formuläret
   // här funkar det inte om jag gör object destruction, men jag förstår inte varför, får tusen felmeddelanden
-  function addNewEmployee(props) {
+  function addNewEmployee(employee) {
     setEmployees(function (prevState) {
       return [
         ...prevState,
         {
-          name: props.name,
-          email: props.email,
-          phone: props.phone,
-          skills: props.skills,
-          imgSrc: props.imgSrc,
-          key: props.name,
+          name: employee.name,
+          email: employee.email,
+          phone: employee.phone,
+          skills: employee.skills,
+          imgSrc: employee.imgSrc,
+          key: employee.name,
         },
       ];
     });
@@ -53,7 +54,7 @@ function EmployeeList() {
 
   // lägger till en förinställd employee
   function addPresetEmployee() {
-    setEmployees(function (prevState) {
+    setEmployees((prevState) => {
       return [
         ...prevState,
         {
@@ -69,12 +70,17 @@ function EmployeeList() {
     });
   }
 
+  // början till en skiss på en funktion som raderar employees 
   function deleteEmployee(e) {
     employees.map((employee) => {
       if (employee.name == e.target.id) {
         localStorage.removeItem(employee.name);
       }
     });
+    setEmployees(() => {
+      return [];
+    });
+    console.log("nu togs alla employees bort");
   }
 
   // sparar i local storage varje gång state uppdateras
@@ -84,59 +90,18 @@ function EmployeeList() {
     });
   }, [employees]);
 
-  // referenser att använda i formuläret
-  let nameInput = useRef();
-  let emailInput = useRef();
-  let phoneInput = useRef();
-  let skillsInput = useRef();
-  let imgInput = useRef();
-
   return (
     <>
-      <form>
-        <label>Name:</label>
-        <input type="text" ref={nameInput}></input>
-        <br />
-        <label>Email:</label>
-        <input type="text" ref={emailInput}></input>
-        <br />
-        <label>Phone:</label>
-        <input type="text" ref={phoneInput}></input>
-        <br />
-        <label>Skills:</label>
-        <input type="text" ref={skillsInput}></input>
-        <br />
-        <label>Image url:</label>
-        <input type="text" placeholder="include http://" ref={imgInput}></input>
-        <br />
-        <button
-          className="button"
-          onClick={(e) => {
-            e.preventDefault(); // förhindrar submit-beteendet
-
-            // skapar ett objekt av det som står i fälten
-            let newEmployee = {
-              name: nameInput.current.value,
-              email: emailInput.current.value,
-              phone: phoneInput.current.value,
-              skills: skillsInput.current.value,
-              imgSrc: imgInput.current.value,
-            };
-            addNewEmployee(newEmployee); // skickar det nya objektet till addEmployee
-          }}
-        >
-          Add employee
-        </button>
-      </form>
-      <button className="button" onClick={addPresetEmployee}>
-        Add preset employee
-      </button>
+      <NewEmployeeForm
+        addNewEmployee={addNewEmployee}
+        addPresetEmployee={addPresetEmployee}
+      />
+      <h2>List of employees</h2>
       {employees.map(function (employee) {
         // går igenom employees o skapar nytt Employee-element och en remove-knapp för varje
         return (
-          <>
           <div className="EmployeeDiv">
-          <Employee
+            <Employee
               name={employee.name}
               email={employee.email}
               phone={employee.phone}
@@ -146,13 +111,12 @@ function EmployeeList() {
             />
             <button
               className="button"
-              onClick={(e) => deleteEmployee(e)}
+              onClick={(e) => deleteEmployee(e)} // denna funktionen är bara en skiss än så länge
               id={employee.name}
             >
               Remove this employee
             </button>
           </div>
-          </>
         );
       })}
     </>
