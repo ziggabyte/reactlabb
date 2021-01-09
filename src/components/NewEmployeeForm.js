@@ -11,20 +11,25 @@ function NewEmployeeForm({ addNewEmployee, addPresetEmployee }) {
   return (
     <>
       <form>
-          <h2>Fill in new employee</h2>
+          <h2>Add new employee</h2>
         <label>Name:</label>
+        <br />
         <input type="text" ref={nameInput}></input>
         <br />
         <label>Email:</label>
+        <br />
         <input type="text" ref={emailInput}></input>
         <br />
         <label>Phone:</label>
+        <br />
         <input type="text" ref={phoneInput}></input>
         <br />
         <label>Skills:</label>
+        <br />
         <input type="text" ref={skillsInput}></input>
         <br />
         <label>Image url:</label>
+        <br />
         <input type="text" placeholder="include http://" ref={imgInput}></input>
         <br />
         <button

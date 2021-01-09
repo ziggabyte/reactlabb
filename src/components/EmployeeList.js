@@ -70,10 +70,10 @@ function EmployeeList() {
     });
   }
 
-  // början till en skiss på en funktion som raderar employees 
+  // början till en skiss på en funktion som raderar employees
   function deleteEmployee(e) {
     employees.map((employee) => {
-      if (employee.name == e.target.id) {
+      if (employee.name === e.target.id) {
         localStorage.removeItem(employee.name);
       }
     });
@@ -96,29 +96,33 @@ function EmployeeList() {
         addNewEmployee={addNewEmployee}
         addPresetEmployee={addPresetEmployee}
       />
-      <h2>List of employees</h2>
-      {employees.map(function (employee) {
-        // går igenom employees o skapar nytt Employee-element och en remove-knapp för varje
-        return (
-          <div className="EmployeeDiv">
-            <Employee
-              name={employee.name}
-              email={employee.email}
-              phone={employee.phone}
-              skills={employee.skills}
-              imgSrc={employee.imgSrc}
-              key={employee.name}
-            />
-            <button
-              className="button"
-              onClick={(e) => deleteEmployee(e)} // denna funktionen är bara en skiss än så länge
-              id={employee.name}
-            >
-              Remove this employee
-            </button>
-          </div>
-        );
-      })}
+      <div className="EmployeeList">
+        <h2>List of employees</h2>
+        <div className="AllEmployeeDivs">
+          {employees.map(function (employee) {
+            // går igenom employees o skapar nytt Employee-element och en remove-knapp för varje
+            return (
+              <div className="EmployeeDiv">
+                <Employee
+                  name={employee.name}
+                  email={employee.email}
+                  phone={employee.phone}
+                  skills={employee.skills}
+                  imgSrc={employee.imgSrc}
+                  key={employee.name}
+                />
+                <button
+                  className="button"
+                  onClick={(e) => deleteEmployee(e)} // denna funktionen är bara en skiss än så länge
+                  id={employee.name}
+                >
+                  Remove this employee
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 }
